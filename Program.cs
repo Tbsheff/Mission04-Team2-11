@@ -34,7 +34,7 @@ internal class Program
             validInput = false;
             while (!validInput)
             {
-                Console.WriteLine("Player 1, please enter your row: ");
+                Console.WriteLine("Player X, please enter your row: ");
                 input = Console.ReadLine();
                 while (input != "1" && input != "2" && input != "3")
                 {
@@ -42,12 +42,12 @@ internal class Program
                     input = Console.ReadLine();
                 }
                 row = int.Parse(input);
-                Console.WriteLine("Player 1, please enter your column: ");
-                input = Console.ReadLine();
+                Console.WriteLine("Player X, please enter your column: ");
+                input = Console.ReadLine().ToUpper();
                 while (input != "A" && input != "B" && input != "C")
                 {
                     Console.WriteLine("Invalid input. Please enter a valid column: ");
-                    input = Console.ReadLine();
+                    input = Console.ReadLine().ToUpper();
                 }
                 // Change letter column to number column
                 if (input == "A")
@@ -75,51 +75,101 @@ internal class Program
             gameBoard[row - 1, column] = "X";
             TicTacToeSystem.TicTacToeGame.printBoard(gameBoard);
             gameOver = TicTacToeSystem.TicTacToeGame.checkWin(gameBoard);
+            // Check for a draw
+            if (!gameOver)
+            {
+                bool draw = true;
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (gameBoard[i, j] == "_")
+                        {
+                            draw = false;
+                        }
+                    }
+                }
+                if (draw)
+                {
+                    Console.WriteLine("The game is a draw!");
+                    gameOver = true;
+                }
+            }
+            // break if winner or draw
             if (gameOver)
             {
-                winner = "Player 1";
                 break;
             }
-            Console.WriteLine("Player 2, please enter your row: ");
-            input = Console.ReadLine();
-            while (input != "1" && input != "2" && input != "3")
+
+            validInput = false;
+            while (!validInput)
             {
-                Console.WriteLine("Invalid input. Please enter a number between 1 and 3: ");
+                Console.WriteLine("Player O, please enter your row: ");
                 input = Console.ReadLine();
-            }
-            row = int.Parse(input);
-            Console.WriteLine("Player 2, please enter your column: ");
-            input = Console.ReadLine();
-            while (input != "A" && input != "B" && input != "C")
-            {
-                Console.WriteLine("Invalid input. Please enter a valid column: ");
-                input = Console.ReadLine();
-            }
-            // Change letter column to number column
-            if (input == "A")
-            {
-                column = 0;
-            }
-            else if (input == "B")
-            {
-                column = 1;
-            }
-            else if (input == "C")
-            {
-                column = 2;
+                while (input != "1" && input != "2" && input != "3")
+                {
+                    Console.WriteLine("Invalid input. Please enter a number between 1 and 3: ");
+                    input = Console.ReadLine();
+                }
+                row = int.Parse(input);
+                Console.WriteLine("Player O, please enter your column: ");
+                input = Console.ReadLine().ToUpper();
+                while (input != "A" && input != "B" && input != "C")
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid column: ");
+                    input = Console.ReadLine().ToUpper();
+                }
+                // Change letter column to number column
+                if (input == "A")
+                {
+                    column = 0;
+                }
+                else if (input == "B")
+                {
+                    column = 1;
+                }
+                else if (input == "C")
+                {
+                    column = 2;
+                }
+                // Check if the spot is taken
+                if (gameBoard[row - 1, column] == "_")
+                {
+                    validInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("That spot is already taken. Please choose another spot.");
+                }
             }
             // Add the player's choice to the game board
             gameBoard[row - 1, column] = "O";
 
             TicTacToeSystem.TicTacToeGame.printBoard(gameBoard);
-            // Print the game board
-            //printBoard(gameBoard);
-            // check if player 2 won
-            //gameOver = checkWin(gameBoard);
-            if (gameOver)
+            gameOver = TicTacToeSystem.TicTacToeGame.checkWin(gameBoard);
+
+            // Check for a draw
+
+            if (!gameOver)
             {
-                winner = "Player 2";
+                bool draw = true;
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (gameBoard[i, j] == "_")
+                        {
+                            draw = false;
+                        }
+                    }
+                }
+                if (draw)
+                {
+                    Console.WriteLine("The game is a draw!");
+                    gameOver = true;
+                }
             }
+
         } while (!gameOver);
     }
 }
